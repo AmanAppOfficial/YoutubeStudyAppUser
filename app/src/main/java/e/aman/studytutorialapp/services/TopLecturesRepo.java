@@ -1,6 +1,7 @@
 package e.aman.studytutorialapp.services;
 
 import android.util.Log;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
@@ -21,7 +22,12 @@ public class TopLecturesRepo {
     private FirebaseDatabase database;
     private DatabaseReference topLecturesRef;
     List<TopCoursesModel> topCoursesModelList = new ArrayList<>();
+    private ViewGroup container;
 
+    public TopLecturesRepo(ViewGroup container)
+    {
+        this.container = container;
+    }
 
     public void getTopCourses(final MyFirebaseService myFirebaseService)
     {
@@ -39,22 +45,16 @@ public class TopLecturesRepo {
                    course.setDescription(dataSnapshot.child(Constants.DESC).getValue().toString());
                    course.setAuthor(dataSnapshot.child(Constants.AUTHOR).getValue().toString());
                    course.setDate(dataSnapshot.child(Constants.DATE).getValue().toString());
-                   Log.e("course", course.getAuthor().toString());
+
                    topCoursesModelList.add(course);
                }
-
-                myFirebaseService.onSuccess(topCoursesModelList);
-
+                myFirebaseService.onSuccess(topCoursesModelList , container);
             }
-
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-
-
     }
 
 }
